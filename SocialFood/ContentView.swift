@@ -8,14 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var AppInstance: AppInstance
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        LoginView(user: self.AppInstance.User, userService: self.AppInstance.UserService)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(AppInstance: AppInstance(
+                user: User(
+                    Email: "",
+                    Password: "",
+                    AccountType: ""
+                ),
+                userService: UserService()
+            )
+        )
     }
 }

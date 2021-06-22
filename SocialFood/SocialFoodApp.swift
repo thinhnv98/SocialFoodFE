@@ -11,7 +11,16 @@ import SwiftUI
 struct SocialFoodApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(
+                AppInstance: AppInstance(
+                    user: User(
+                        Email: "",
+                        Password: "",
+                        AccountType: ""
+                    ),
+                    userService: UserService()
+                )
+            )
         }
     }
 }
