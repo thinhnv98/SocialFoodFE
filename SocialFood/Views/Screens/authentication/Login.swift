@@ -16,6 +16,7 @@ struct LoginView: View {
         NavigationView {
             VStack(spacing: 15){
                 Spacer()
+                Spacer()
                 LoginPageTitle()
                 LoginPageImageCircle()
                 UserNameView(email: $user.Email)
@@ -71,12 +72,6 @@ struct LoginButtonView: View {
     @State var isLoginSuccess = false
     
     var body: some View {
-        NavigationLink(destination: HomeView().animation(.easeOut), isActive: $isLoginSuccess){}.hidden()
-            .alert(isPresented: $isShowErr) {
-                Alert(title: Text("Error!").foregroundColor(.red),
-                      message: Text("Email & Password is required!"),
-                      dismissButton: .default(Text("OK")))
-            }
         Text("").hidden()
             .alert(isPresented: $isFailed) {
                 Alert(title: Text("Failed!").foregroundColor(.red),
@@ -84,16 +79,16 @@ struct LoginButtonView: View {
                       dismissButton: .destructive(Text("Cancel")))
             }
         Button(action: {
-            if self.user.Email == "" || self.user.Password == "" {
-                self.isShowErr = true
-                return
-            }
-            
-            self.userService.Authenticate(user: user) { isSuccess in
-                self.isLoginSuccess = isSuccess
-                self.isFailed = !isSuccess
-            }
-
+            self.isLoginSuccess = true
+//            if self.user.Email == "" || self.user.Password == "" {
+//                self.isShowErr = true
+//                return
+//            }
+//
+//            self.userService.Authenticate(user: user) { isSuccess in
+//                self.isLoginSuccess = isSuccess
+//                self.isFailed = !isSuccess
+//            }
             return
         }, label: {
             Text("Login")
@@ -103,12 +98,23 @@ struct LoginButtonView: View {
                 .foregroundColor(.white)
                 .cornerRadius(10)
         })
+        ZStack{
+            Text("").hidden()
+                .fullScreenCover(isPresented: $isLoginSuccess, content: {
+                    HomePlusView()
+                })
+        }
+        .alert(isPresented: $isShowErr) {
+            Alert(title: Text("Error!").foregroundColor(.red),
+                  message: Text("Email & Password is required!"),
+                  dismissButton: .default(Text("OK")))
+            }
     }
 }
 
 struct LoginPageTitle: View {
     var body: some View {
-        Text("Social Food")
+        Text("Social Travels")
             .font(.system(size: 64, weight: .semibold))
             .foregroundColor(.white)
     }

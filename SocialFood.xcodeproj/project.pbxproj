@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		E97698EE268092FF00270502 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97698ED268092FF00270502 /* UserService.swift */; };
 		E97698F126809AFD00270502 /* AppStart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97698F026809AFD00270502 /* AppStart.swift */; };
-		E997760C26806945004AE51F /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = E997760B26806945004AE51F /* Home.swift */; };
 		E997760E26807062004AE51F /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E997760D26807062004AE51F /* ForgotPasswordView.swift */; };
 		E99776102680716D004AE51F /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = E997760F2680716D004AE51F /* Register.swift */; };
 		E99C324E2681FE8D00CD185A /* network.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C324D2681FE8D00CD185A /* network.swift */; };
+		E99C32512683395000CD185A /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C32502683395000CD185A /* Home.swift */; };
+		E99C328E26836C9C00CD185A /* ImageFromUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C328D26836C9C00CD185A /* ImageFromUrl.swift */; };
 		E9B5AC76267C605A0053FFA3 /* SocialFoodApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B5AC75267C605A0053FFA3 /* SocialFoodApp.swift */; };
 		E9B5AC78267C605A0053FFA3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B5AC77267C605A0053FFA3 /* ContentView.swift */; };
 		E9B5AC7A267C605C0053FFA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9B5AC79267C605C0053FFA3 /* Assets.xcassets */; };
@@ -43,10 +44,11 @@
 /* Begin PBXFileReference section */
 		E97698ED268092FF00270502 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		E97698F026809AFD00270502 /* AppStart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStart.swift; sourceTree = "<group>"; };
-		E997760B26806945004AE51F /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		E997760D26807062004AE51F /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		E997760F2680716D004AE51F /* Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
 		E99C324D2681FE8D00CD185A /* network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = network.swift; sourceTree = "<group>"; };
+		E99C32502683395000CD185A /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		E99C328D26836C9C00CD185A /* ImageFromUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFromUrl.swift; sourceTree = "<group>"; };
 		E9B5AC72267C605A0053FFA3 /* SocialFood.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocialFood.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9B5AC75267C605A0053FFA3 /* SocialFoodApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialFoodApp.swift; sourceTree = "<group>"; };
 		E9B5AC77267C605A0053FFA3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -114,6 +116,29 @@
 			path = Initilization;
 			sourceTree = "<group>";
 		};
+		E99C324F2683166D00CD185A /* page */ = {
+			isa = PBXGroup;
+			children = (
+				E99C32502683395000CD185A /* Home.swift */,
+			);
+			path = page;
+			sourceTree = "<group>";
+		};
+		E99C328C26836C8E00CD185A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E99C328D26836C9C00CD185A /* ImageFromUrl.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		E99C328F26837A0500CD185A /* components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = components;
+			sourceTree = "<group>";
+		};
 		E9B5AC69267C60590053FFA3 = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +162,7 @@
 		E9B5AC74267C605A0053FFA3 /* SocialFood */ = {
 			isa = PBXGroup;
 			children = (
+				E99C328C26836C8E00CD185A /* Utils */,
 				E99C324C2681FE2C00CD185A /* Initilization */,
 				E99C324A2681FD9200CD185A /* NetWork */,
 				E9B5ACA6267C62DC0053FFA3 /* Models */,
@@ -180,7 +206,6 @@
 		E9B5ACA0267C60B90053FFA3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E9B5ACA4267C62960053FFA3 /* Navigation */,
 				E9B5ACA3267C62870053FFA3 /* Screens */,
 			);
 			path = Views;
@@ -189,17 +214,11 @@
 		E9B5ACA3267C62870053FFA3 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				E99C328F26837A0500CD185A /* components */,
+				E99C324F2683166D00CD185A /* page */,
 				E997761126807183004AE51F /* authentication */,
-				E997760B26806945004AE51F /* Home.swift */,
 			);
 			path = Screens;
-			sourceTree = "<group>";
-		};
-		E9B5ACA4267C62960053FFA3 /* Navigation */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Navigation;
 			sourceTree = "<group>";
 		};
 		E9B5ACA5267C62B80053FFA3 /* Services */ = {
@@ -350,10 +369,11 @@
 				E9B5ACA8267C62F00053FFA3 /* user.swift in Sources */,
 				E9B5ACA2267C60D70053FFA3 /* Login.swift in Sources */,
 				E99C324E2681FE8D00CD185A /* network.swift in Sources */,
-				E997760C26806945004AE51F /* Home.swift in Sources */,
+				E99C328E26836C9C00CD185A /* ImageFromUrl.swift in Sources */,
 				E9B5AC78267C605A0053FFA3 /* ContentView.swift in Sources */,
 				E97698EE268092FF00270502 /* UserService.swift in Sources */,
 				E99776102680716D004AE51F /* Register.swift in Sources */,
+				E99C32512683395000CD185A /* Home.swift in Sources */,
 				E9B5AC76267C605A0053FFA3 /* SocialFoodApp.swift in Sources */,
 				E997760E26807062004AE51F /* ForgotPasswordView.swift in Sources */,
 				E97698F126809AFD00270502 /* AppStart.swift in Sources */,

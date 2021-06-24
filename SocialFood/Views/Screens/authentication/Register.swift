@@ -48,7 +48,7 @@ struct RegisterView: View {
                               dismissButton: .default(Text("OK")))
                     }
             }
-            .navigationBarTitle("Register")
+            .navigationBarTitle("Register", displayMode: .inline)
             Spacer()
                 
             Button(action: {
