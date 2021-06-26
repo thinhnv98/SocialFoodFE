@@ -7,22 +7,31 @@
 
 import SwiftUI
 
+struct NavigationLazyView<Content: View>: View {
+    let build: () -> Content
+    init(_ build: @autoclosure @escaping () -> Content) {
+        self.build = build
+    }
+    var body: Content {
+        build()
+    }
+}
+
 struct DiscoverCategoriesView: View {
     
     let categories: [Category] = [
         .init(name: "Art", imageName: "paintpalette.fill"),
-        .init(name: "Sport", imageName: "sportscourt.fill"),
+        .init(name: "Sports", imageName: "sportscourt.fill"),
         .init(name: "Live Events", imageName: "music.mic"),
         .init(name: "Food", imageName: "tray.fill"),
         .init(name: "History", imageName: "books.vertical.fill"),
     ]
-    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false){
             HStack(spacing: 14){
                 ForEach(categories, id: \.self ) { category in
                     NavigationLink(
-                        destination: CategoryDetailsView(),
+                        destination: NavigationLazyView(CategoryDetailsView(name: category.name)),
                         label: {
                             VStack(spacing: 8){
                                 Image(systemName: category.imageName)
@@ -44,30 +53,12 @@ struct DiscoverCategoriesView: View {
     }
 }
 
-struct CategoryDetailsView: View {
-    var body: some View{
-        ScrollView {
-            ForEach(0..<5, id: \.self) { num in
-                VStack(alignment: .leading, spacing: 0){
-                    Image("1.paintershop")
-                        .resizable()
-                        .scaledToFill()
-                    Text("Demo123")
-                        .font(.system(size: 12, weight: .semibold))
-                        .padding()
-                        
-                }.asTile()
-                .padding()
-            }
-        }.navigationBarTitle("Category", displayMode: .inline)
-    }
-}
+
+
+
 
 struct DiscoverCategoriesView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView{
-            CategoryDetailsView()
-        }
         HomeView()
 //        ZStack{
 //            Color.orange
