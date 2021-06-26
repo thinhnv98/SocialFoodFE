@@ -79,16 +79,16 @@ struct LoginButtonView: View {
                       dismissButton: .destructive(Text("Cancel")))
             }
         Button(action: {
-            self.isLoginSuccess = true
-//            if self.user.Email == "" || self.user.Password == "" {
-//                self.isShowErr = true
-//                return
-//            }
-//
-//            self.userService.Authenticate(user: user) { isSuccess in
-//                self.isLoginSuccess = isSuccess
-//                self.isFailed = !isSuccess
-//            }
+//            self.isLoginSuccess = true
+            if self.user.Email == "" || self.user.Password == "" {
+                self.isShowErr = true
+                return
+            }
+
+            self.userService.Authenticate(user: user) { isSuccess in
+                self.isLoginSuccess = isSuccess
+                self.isFailed = !isSuccess
+            }
             return
         }, label: {
             Text("Login")
