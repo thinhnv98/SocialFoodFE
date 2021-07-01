@@ -208,14 +208,15 @@ struct CreatorDetailView: View {
                                     .background(Color(#colorLiteral(red: 0.8936722875, green: 0.9387666583, blue: 1, alpha: 1)))
                                     .cornerRadius(20)
                             }.padding(.bottom)
-                            .padding(.horizontal, 12)
+                            .padding(.horizontal, 2)
                         }
                         
                         
                     }
 //                    .frame(height: 200)
+                    .background(Color(white: 1))
                     .cornerRadius(12)
-                    .shadow(color: .init(white: 1), radius: 5, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 4)
+                    .shadow(color: .init(white: 0.8), radius: 5, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 4)
                 }
                 
             }.padding(.horizontal)
