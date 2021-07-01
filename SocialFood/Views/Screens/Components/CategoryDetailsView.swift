@@ -115,11 +115,11 @@ struct CategoryDetailsView: View {
         .navigationBarTitle(name, displayMode: .inline)
     }
 }
-
-struct CategoryDetailsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView{
-            CategoryDetailsView(name: "food")
-        }
-    }
-}
+//
+//struct CategoryDetailsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationView{
+//            CategoryDetailsView(name: "food")
+//        }
+//    }
+//}

@@ -53,24 +53,24 @@ struct DiscoverCategoriesView: View {
     }
 }
 
-
-
-
-
-struct DiscoverCategoriesView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-//        ZStack{
-//            Color.orange
-//            DiscoverCategoriesView()
-//        }
-        
-//        NavigationView{
-//            NavigationLink(
-//                destination: Text("Transition Screen"),
-//                label: {
-//                    Text("Link")
-//                })
-//        }
-    }
-}
+//
+//
+//
+//
+//struct DiscoverCategoriesView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeView()
+////        ZStack{
+////            Color.orange
+////            DiscoverCategoriesView()
+////        }
+//
+////        NavigationView{
+////            NavigationLink(
+////                destination: Text("Transition Screen"),
+////                label: {
+////                    Text("Link")
+////                })
+////        }
+//    }
+//}
