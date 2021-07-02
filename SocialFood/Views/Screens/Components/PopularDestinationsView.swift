@@ -157,7 +157,6 @@ struct PopularDestinationDetailsView: View {
             }.padding(.horizontal)
             
             Map(coordinateRegion: $region, annotationItems: isShowingAttractions ? attractions : []) { attraction in
-//                MapMarker(coordinate: .init(latitude: attraction.latitude, longitude: attraction.longitute), tint: .red)
                 MapAnnotation(coordinate: .init(latitude: attraction.latitude, longitude: attraction.longitute)) {
                     CustomeMapAnnotation(attraction: attraction)
                 }
