@@ -7,14 +7,12 @@
 
 import SwiftUI
 import MapKit
+import Kingfisher
 
 struct PopularDestinationsView: View{
     
-    let destinations: [Destination] = [
-        .init(name: "Paris", country: "France", imageName: "1.eiffel", latitude: 48.855014, longitude: 2.341231),
-        .init(name: "Tokyo", country: "Japan", imageName: "1.japan", latitude: 35.67988, longitude: 139.7695),
-        .init(name: "New York", country: "US", imageName: "1.newyork", latitude: 40.71592, longitude: -74.0055),
-    ]
+    @ObservedObject var vm = DestinationViewModel()
+    @State var isReload = false
     
     var body: some View{
         VStack{
@@ -22,16 +20,26 @@ struct PopularDestinationsView: View{
                 Text("Popular destinations")
                     .font(.system(size: 14, weight: .semibold))
                 Spacer()
-                Text("See all")
-                    .font(.system(size: 12, weight: .semibold))
+                NavigationLink(
+                    destination: NewDestination(parentVm: vm),
+                    label: {
+                        Text("Create")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color(.label))
+                    })
+                
             }.padding(.horizontal)
             .padding(.top)
             
             ScrollView(.horizontal) {
                 HStack(spacing: 8.0){
-                    ForEach(destinations, id: \.self) { destination in
+                    ForEach(vm.destinations ?? [], id: \.self) { destination in
                         NavigationLink(
-                            destination: NavigationLazyView(PopularDestinationDetailsView(destination: destination)))
+                            destination: NavigationLazyView(PopularDestinationDetailsView(destination: destination, parentVm: vm)),
+                            label: {
+                                PopularDestinationTile(destination: destination)
+                                .padding(.bottom)
+                            })
                     }
                 }.padding(.horizontal)
             }
@@ -39,20 +47,15 @@ struct PopularDestinationsView: View{
     }
 }
 
-struct DestinationDetail: Decodable {
-    let description: String
-    let photos: [String]
-}
-
 class DestinationDetailsViewModel: ObservableObject {
     
     @Published var isLoading = true
     @Published var destinationDetails: DestinationDetail?
     
-    init(name: String) {
+    init(id: Int, name: String) {
         //make a network call
 //        let name = "paris"
-        let fixedUrlString = "https://travel.letsbuildthatapp.com/travel_discovery/destination?name=\(name.lowercased())".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let fixedUrlString = "http://localhost:8080/api/destination-detail/\(id)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         guard let url = URL(string: fixedUrlString)
         else {return}
         URLSession.shared.dataTask(with: url) { data, resp, err in
@@ -76,28 +79,27 @@ class DestinationDetailsViewModel: ObservableObject {
 struct PopularDestinationDetailsView: View {
     
     @ObservedObject var vm: DestinationDetailsViewModel
+    @ObservedObject var parentVm: DestinationViewModel
     
     let destination: Destination
+    let destinationService = DestinationService()
     
     @State var region: MKCoordinateRegion
     @State var isShowingAttractions = false
+    @State var starVote = 0
+    @State var isConfirmVote = false
+    @State var isVoteSuccess = false
     
     
-    
-    init(destination: Destination) {
+    init(destination: Destination, parentVm: DestinationViewModel) {
         
         self.destination = destination
         
         self._region = State(initialValue: MKCoordinateRegion(center: .init(latitude: destination.latitude, longitude: destination.longitude), span: .init(latitudeDelta: 0.04, longitudeDelta: 0.04)))
         
-        self.vm = .init(name: destination.name)
+        self.vm = .init(id: destination.id, name: destination.name)
+        self.parentVm = parentVm
     }
-    
-    let imageUrlStrings = [
-        "https://letsbuildthatapp-videos.s3-us-west-2.amazonaws.com/2240d474-2237-4cd3-9919-562cd1bb439e",
-        "https://letsbuildthatapp-videos.s3-us-west-2.amazonaws.com/b1642068-5624-41cf-83f1-3f6dff8c1702",
-        "https://letsbuildthatapp-videos.s3-us-west-2.amazonaws.com/6982cc9d-3104-4a54-98d7-45ee5d117531",
-    ]
     
     var body: some View{
         ScrollView{
@@ -108,25 +110,71 @@ struct PopularDestinationDetailsView: View {
                     .frame(height: 350)
             }
             
-//            Image(destination.imageName)
-//                .resizable()
-//                .scaledToFill()
-//                .clipped()
-            
             VStack(alignment: .leading){
-                Text(destination.name)
-                    .font(.system(size: 18, weight: .bold))
+                HStack {
+                    Text(destination.name)
+                        .font(.system(size: 18, weight: .bold))
+                        .alert(isPresented: $isVoteSuccess) {
+                            Alert(title: Text("Success!"),
+                                  message: Text("You just voted for \(destination.name)!"),
+                                  dismissButton: .default(Text("OK")))
+                        }
+                    Spacer()
+                        .alert(isPresented: $isConfirmVote) {
+                            Alert(title: Text("Confirm vote?"),
+                                  message: Text("Vote \(destination.name) with rank \(starVote)"),
+                                  primaryButton: .default(Text("OK"), action: {
+                                    self.destinationService.VoteDestination(destinationVote: DestinationVote(vote: starVote, destinationID: destination.id)) { resp in
+                                        if resp.isSuccess {
+                                            self.vm.destinationDetails?.vote = resp.rank
+                                            self.isVoteSuccess = true
+                                        }
+                                    }
+                                    self.destinationService.GetDestination { result in
+                                        self.parentVm.destinations = result.result
+                                    }
+                                  }),
+                                  secondaryButton: .destructive(Text("Cancel")))
+                        }
+                    Text("Vote").contextMenu {
+                        ForEach(0..<5, id: \.self) { vote in
+                            Button(action: {
+                                starVote = vote + 1
+                                isConfirmVote = true
+                            }, label: {
+                                Text("Choose star to vote: \(vote + 1)")
+                                Image(systemName: "star.fill")
+                            })
+                        }
+                    }
+                    .padding(5)
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                    .background(Color.orange)
+                    .cornerRadius(10)
+                }
                 Text(destination.country)
                 
                 HStack{
-                    ForEach(0..<5, id: \.self){num in
-                        Image(systemName: "star.fill")
-                            .foregroundColor(.orange)
+                    if let vote = vm.destinationDetails?.vote {
+                        ForEach(0..<vote, id: \.self){num in
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.orange)
+                        }.padding(.top, 2)
+                        ForEach(0..<5 - vote, id: \.self){num in
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.gray)
+                        }.padding(.top, 2)
+                        
+                    } else {
+                        ForEach(0..<5, id: \.self){num in
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.orange)
+                        }
                     }
                 }.padding(.top, 2)
                 
                 HStack{
-                    Text(vm.destinationDetails?.description ?? "")
+                    Text(vm.destinationDetails?.description ?? "No description")
                         .padding(.top, 4)
                         .font(.system(size: 14))
                     Spacer()
@@ -143,10 +191,36 @@ struct PopularDestinationDetailsView: View {
     
 }
 
+struct PopularDestinationTile: View {
+    
+    let destination: Destination
+    
+    var body: some View{
+        VStack(alignment: .leading, spacing: 0){
+            KFImage(URL(string: destination.imageName))
+                .resizable()
+                .scaledToFill()
+                .frame(width: 125, height: 125)
+                .cornerRadius(4)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 6)
+            
+            Text(destination.name)
+                .font(.system(size: 12, weight: .semibold))
+                .padding(.horizontal, 12)
+                .foregroundColor(Color(.label))
+            
+            Text(destination.country)
+                .font(.system(size: 12, weight: .semibold))
+                .padding(.horizontal, 12)
+                .padding(.bottom, 8)
+                .foregroundColor(.gray)
+        }
+        .asTile()
+    }
+}
 
-
-
-struct PopularDestinationsView_Previews: PreviewProvider {
+struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
     }

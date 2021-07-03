@@ -14,3 +14,6 @@ struct User {
     var AccountType: String
 }
 
+struct StatusResponse: Decodable {
+    var isSuccess: Bool
+}
