@@ -212,7 +212,7 @@ struct Dishcell: View {
                     .padding(.vertical, 2)
                 
                 LinearGradient(gradient: Gradient(colors: [Color.clear, Color.black]), startPoint: .center, endPoint: .bottom)
-               
+                Image("")
                 Text(dish.price)
                     .foregroundColor(.white)
                     .font(.system(size: 12, weight: .regular))
@@ -232,10 +232,3 @@ struct Dishcell: View {
 }
 
 import Kingfisher
-
-
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-    }
-}

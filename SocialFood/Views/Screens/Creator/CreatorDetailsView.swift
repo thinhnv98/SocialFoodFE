@@ -27,3 +27,5 @@ struct DiscoverCreatorView: View {
         .shadow(color: .gray, radius: 4, x: 0.0, y: 2)
     }
 }
+
+

@@ -29,6 +29,10 @@
 		E99776102680716D004AE51F /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = E997760F2680716D004AE51F /* Register.swift */; };
 		E99C324E2681FE8D00CD185A /* network.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C324D2681FE8D00CD185A /* network.swift */; };
 		E99C32512683395000CD185A /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C32502683395000CD185A /* Home.swift */; };
+		E9A0D50D26900F8200E7980F /* DestinationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A0D50C26900F8200E7980F /* DestinationViewModel.swift */; };
+		E9A0D50F2690321000E7980F /* NewDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A0D50E2690321000E7980F /* NewDestination.swift */; };
+		E9A0D51126903B8C00E7980F /* DestinationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A0D51026903B8C00E7980F /* DestinationService.swift */; };
+		E9A0D5132690826600E7980F /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A0D5122690826600E7980F /* ImageProvider.swift */; };
 		E9B5AC76267C605A0053FFA3 /* SocialFoodApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B5AC75267C605A0053FFA3 /* SocialFoodApp.swift */; };
 		E9B5AC78267C605A0053FFA3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B5AC77267C605A0053FFA3 /* ContentView.swift */; };
 		E9B5AC7A267C605C0053FFA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9B5AC79267C605C0053FFA3 /* Assets.xcassets */; };
@@ -79,6 +83,10 @@
 		E997760F2680716D004AE51F /* Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
 		E99C324D2681FE8D00CD185A /* network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = network.swift; sourceTree = "<group>"; };
 		E99C32502683395000CD185A /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		E9A0D50C26900F8200E7980F /* DestinationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationViewModel.swift; sourceTree = "<group>"; };
+		E9A0D50E2690321000E7980F /* NewDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDestination.swift; sourceTree = "<group>"; };
+		E9A0D51026903B8C00E7980F /* DestinationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationService.swift; sourceTree = "<group>"; };
+		E9A0D5122690826600E7980F /* ImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProvider.swift; sourceTree = "<group>"; };
 		E9B5AC72267C605A0053FFA3 /* SocialFood.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocialFood.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9B5AC75267C605A0053FFA3 /* SocialFoodApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialFoodApp.swift; sourceTree = "<group>"; };
 		E9B5AC77267C605A0053FFA3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -128,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				E94CCA562688552E0068C313 /* DestinationHeaderContainer.swift */,
+				E9A0D50C26900F8200E7980F /* DestinationViewModel.swift */,
 			);
 			path = Destination;
 			sourceTree = "<group>";
@@ -181,6 +190,7 @@
 			children = (
 				E95AD3D62684EA8A0051FF7C /* TileModifier.swift */,
 				E95AD3E0268601520051FF7C /* ActivityIndicatorView.swift */,
+				E9A0D5122690826600E7980F /* ImageProvider.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -193,6 +203,7 @@
 				E95AD3CC2684E1920051FF7C /* DiscoverCategoriesView.swift */,
 				E95AD3CE2684E1B40051FF7C /* TrendingCreatorsView.swift */,
 				E95AD3DE268600BA0051FF7C /* CategoryDetailsView.swift */,
+				E9A0D50E2690321000E7980F /* NewDestination.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -286,6 +297,7 @@
 			isa = PBXGroup;
 			children = (
 				E97698ED268092FF00270502 /* UserService.swift */,
+				E9A0D51026903B8C00E7980F /* DestinationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -459,13 +471,17 @@
 				E97698EE268092FF00270502 /* UserService.swift in Sources */,
 				E94CCA572688552E0068C313 /* DestinationHeaderContainer.swift in Sources */,
 				E95AD3D12684E21E0051FF7C /* Creator.swift in Sources */,
+				E9A0D51126903B8C00E7980F /* DestinationService.swift in Sources */,
 				E95AD3CD2684E1920051FF7C /* DiscoverCategoriesView.swift in Sources */,
 				E99776102680716D004AE51F /* Register.swift in Sources */,
 				E95AD3E1268601520051FF7C /* ActivityIndicatorView.swift in Sources */,
+				E9A0D50F2690321000E7980F /* NewDestination.swift in Sources */,
 				E95AD3E3268601900051FF7C /* Place.swift in Sources */,
 				E9F2D155268E0C96007DDA12 /* CreatorDetailsView.swift in Sources */,
 				E95AD3D32684E24A0051FF7C /* Category.swift in Sources */,
+				E9A0D5132690826600E7980F /* ImageProvider.swift in Sources */,
 				E99C32512683395000CD185A /* Home.swift in Sources */,
+				E9A0D50D26900F8200E7980F /* DestinationViewModel.swift in Sources */,
 				E9B5AC76267C605A0053FFA3 /* SocialFoodApp.swift in Sources */,
 				E95AD3D52684E2730051FF7C /* Destination.swift in Sources */,
 				E997760E26807062004AE51F /* ForgotPasswordView.swift in Sources */,

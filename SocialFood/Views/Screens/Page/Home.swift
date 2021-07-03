@@ -26,8 +26,7 @@ struct HomeView: View {
                 //backgound color
                 LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.9989364743, green: 0.6389529705, blue: 0.1817156971, alpha: 1)), Color(#colorLiteral(red: 1, green: 0.4949038029, blue: 0.009055896662, alpha: 1))]), startPoint: .top, endPoint: .center)
                     .ignoresSafeArea()
-                
-                
+
                 Color.discoverBackground
                     .offset(y: 400)
                 
@@ -63,5 +62,3 @@ struct HomeView: View {
         }
     }
 }
-
-
