@@ -91,6 +91,9 @@ struct NewDestination: View {
                     if result.isSuccess == true {
                         self.createNotificationTitle = "Succeed"
                         self.createNotificationDescription = "OK"
+                        self.destinationService.GetDestination { result in
+                            self.parentVm.destinations = result.result
+                        }
                         self.colorState = true
                     } else {
                         self.createNotificationTitle = "Failed"
