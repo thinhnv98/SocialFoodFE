@@ -66,9 +66,7 @@ class DestinationDetailsViewModel: ObservableObject {
                 guard let data = data else {return}
                 
                 do {
-                    
-                    self.destinationDetails = try JSONDecoder().decode(DestinationDetail.self, from: data)
-                    
+                    self.destinationDetails = try JSONDecoder().decode(DestinationDetail.self, from: data) 
                 } catch {
                     print("Failed to decode JSON, ", error)
                 }
@@ -80,20 +78,13 @@ class DestinationDetailsViewModel: ObservableObject {
 struct PopularDestinationDetailsView: View {
     
     @ObservedObject var vm: DestinationDetailsViewModel
-    
     let destination: Destination
-    
     @State var region: MKCoordinateRegion
     @State var isShowingAttractions = false
     
-    
-    
     init(destination: Destination) {
-        
         self.destination = destination
-        
         self._region = State(initialValue: MKCoordinateRegion(center: .init(latitude: destination.latitude, longitude: destination.longitude), span: .init(latitudeDelta: 0.04, longitudeDelta: 0.04)))
-        
         self.vm = .init(name: destination.name)
     }
     
@@ -106,7 +97,6 @@ struct PopularDestinationDetailsView: View {
     var body: some View{
         ScrollView{
             //if good then array, else then []
-            
             if let photos = vm.destinationDetails?.photos {
                 DestinationHeaderContainer(imageUrlStrings: vm.destinationDetails?.photos ?? photos)
                     .frame(height: 350)
@@ -135,7 +125,6 @@ struct PopularDestinationDetailsView: View {
                         .font(.system(size: 14))
                     Spacer()
                 }
-//
 //                HStack{Spacer()}
             }
             .padding(.horizontal)
@@ -144,14 +133,12 @@ struct PopularDestinationDetailsView: View {
                 Text("Location")
                     .font(.system(size: 18, weight: .semibold))
                 Spacer()
-                
                 Button(action: {
                     isShowingAttractions.toggle()
                 }, label: {
                     Text("\(isShowingAttractions ? "Hide" : "Show") Attractions")
                         .font(.system(size: 14, weight: .semibold))
                 })
-                
                 Toggle("Title title", isOn: $isShowingAttractions)
                     .labelsHidden()
             }.padding(.horizontal)
@@ -175,7 +162,6 @@ struct PopularDestinationDetailsView: View {
 
 struct CustomeMapAnnotation: View {
     let attraction: Attraction
-    
     var body: some View {
         VStack{
             Image(attraction.imageName)
@@ -184,7 +170,6 @@ struct CustomeMapAnnotation: View {
                 .cornerRadius(4)
                 .overlay(RoundedRectangle(cornerRadius: 4)
                             .stroke(Color(.init(white: 0, alpha: 0.5)))
-                
                 )
             
             Text(attraction.name)
@@ -195,7 +180,6 @@ struct CustomeMapAnnotation: View {
                 .foregroundColor(.white)
                 .overlay(RoundedRectangle(cornerRadius: 4)
                             .stroke(Color(.init(white: 0, alpha: 0.5)))
-                
                 )
         }.shadow(radius: 5)
     }
@@ -203,7 +187,6 @@ struct CustomeMapAnnotation: View {
 
 struct Attraction: Identifiable {
     let id = UUID().uuidString
-    
     let name, imageName: String
     let latitude, longitute: Double
 }
@@ -211,7 +194,6 @@ struct Attraction: Identifiable {
 struct PopularDestinationTile: View {
     
     let destination: Destination
-    
     var body: some View{
         VStack(alignment: .leading, spacing: 0){
             Image(destination.imageName)
