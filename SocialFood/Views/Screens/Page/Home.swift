@@ -1,9 +1,4 @@
-//
-//  HomePlus.swift
-//  SocialFood
-//
-//  Created by Thịnh Nguyễn on 23/06/2021.
-//
+
 
 import Foundation
 import SwiftUI
@@ -52,7 +47,7 @@ struct HomeView: View {
                         
                         PopularRestaurantsView()
                         
-                        TrendingCreatorsView()
+                      
                     }.background(Color.discoverBackground)
                     .cornerRadius(16)
                     .padding(.top, 32)
