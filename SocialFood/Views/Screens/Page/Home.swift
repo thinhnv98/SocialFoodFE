@@ -47,7 +47,7 @@ struct HomeView: View {
                         
                         PopularRestaurantsView()
                         
-                      TrendingCreatorsView()
+                
                     }.background(Color.discoverBackground)
                     .cornerRadius(16)
                     .padding(.top, 32)
