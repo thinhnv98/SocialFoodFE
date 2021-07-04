@@ -2,8 +2,6 @@
 //  PopularRestaurantsView.swift
 //  SocialFood
 //
-//  Created by Thịnh Nguyễn on 24/06/2021.
-//
 
 import SwiftUI
 
@@ -89,10 +87,10 @@ struct RestaurantTile: View {
     }
 }
 
-//
-//struct PopularRestaurantsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PopularRestaurantsView()
-//    }
-//}
+struct PopularRestaurantsView_Previews: PreviewProvider {
+    static var previews: some View {
+        PopularRestaurantsView()
+    }
+}
+
 

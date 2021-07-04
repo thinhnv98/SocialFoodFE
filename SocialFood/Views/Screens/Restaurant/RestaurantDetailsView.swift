@@ -2,8 +2,6 @@
 //  RestaurantDetailsView.swift
 //  SocialFood
 //
-//  Created by Thịnh Nguyễn on 28/06/2021.
-//
 
 import SwiftUI
 
@@ -232,3 +230,4 @@ struct Dishcell: View {
 }
 
 import Kingfisher
+
