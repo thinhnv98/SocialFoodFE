@@ -10,6 +10,10 @@ import SwiftUI
 
 struct RegisterState {
     var email: String
+    var nickName: String
+    var firstName: String
+    var lastName: String
+    var imageProfile: String
     var password: String
     var passwordConfirm: String
     var colorState: Bool
@@ -22,6 +26,10 @@ struct RegisterView: View {
     @Binding var state: RegisterState
     @Binding var userService: UserService
     @Binding var isGoBack: Bool
+    @State var imageProfile = UIImage()
+    @State var isShowingImagePicker = false
+    @State var isDifferentPassword = false
+    @State var isInvalidData = false
     
     var body: some View{
         VStack(spacing: 15){
@@ -29,18 +37,48 @@ struct RegisterView: View {
                 Section(header: Text("Information")) {
                     TextField("Email", text: $state.email)
                         .frame(height: 50)
-                        .alert(isPresented: $state.isCreated) {
-                            Alert(title: Text("Success!"),
-                                  message: Text("Go back to login page"),
-                                  dismissButton: .default(Text("OK"), action: {
-                                    isGoBack = false
-                                  }))
-                        }
-                    TextField("Password", text: $state.password)
+                    TextField("Nick name",text: $state.nickName)
+                    TextField("First name",text: $state.firstName)
+                    TextField("Last name",text: $state.lastName)
+                    SecureField("Password", text: $state.password)
                         .frame(height: 50)
-                    TextField("Password Confirm", text: $state.passwordConfirm)
+                    SecureField("Password Confirm", text: $state.passwordConfirm)
                         .frame(height: 50)
+                }.alert(isPresented: $isDifferentPassword) {
+                    Alert(title: Text("Error!"),
+                          message: Text("Password mismatch, verify again!"),
+                          dismissButton: .destructive(Text("OK")))
                 }
+                
+                
+                Section(header: Text("Profile Image")) {
+                    VStack {
+                        Image(uiImage: imageProfile)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 80, height: 60)
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                            .clipped()
+                        
+                        Button(action: {
+                            self.isShowingImagePicker.toggle()
+                        }, label: {
+                            Text("Select image")
+                                .font(.system(size: 12))
+                        })
+                        .sheet(isPresented: $isShowingImagePicker, content: {
+                            ImagePickerView(isPresented: $isShowingImagePicker, selectedImage: self.$imageProfile)
+                        })
+                    }
+                }
+                .alert(isPresented: $state.isCreated) {
+                    Alert(title: Text("Success!"),
+                          message: Text("Go back to login page"),
+                          dismissButton: .default(Text("OK"), action: {
+                            isGoBack = false
+                          }))
+                }
+                
                 ConfigAccountView(state: $state)
                     .alert(isPresented: $state.isExisted) {
                         Alert(title: Text("Failed!"),
@@ -50,17 +88,31 @@ struct RegisterView: View {
             }
             .navigationBarTitle("Register", displayMode: .inline)
             Spacer()
+                .alert(isPresented: $isInvalidData) {
+                    Alert(title: Text("Error!"),
+                          message: Text("Please fill full information"),
+                          dismissButton: .destructive(Text("Cancel")))
+                }
                 
             Button(action: {
-                self.userService.Register(user: User(Email: state.email, Password: state.password, AccountType: state.typeSelected)) { registerResponse in
+                if state.email == "" || state.nickName == "" || state.firstName == "" || state.lastName == "" || state.password == "" || state.passwordConfirm == "" {
+                    self.isInvalidData = true
+                    return
+                }
+                self.state.imageProfile = imageToBase64(image: self.imageProfile)
+                
+                if state.password != state.passwordConfirm {
+                    self.isDifferentPassword = true
+                    return
+                }
+                
+                self.userService.Register(user: User(Email: state.email, NickName: state.nickName, FirstName: state.firstName, LastName: state.lastName, ImageProfile: state.imageProfile, Password: state.password, AccountType: state.typeSelected)) { registerResponse in
                     if registerResponse.IsExisted {
                         state.isExisted = true
-                        state.isCreated = false
                     }
                     
                     if registerResponse.IsSuccess {
-                        state.isExisted = false
-                        state.isCreated = true
+                        self.state.isCreated = true
                     }
                 }
             }, label: {

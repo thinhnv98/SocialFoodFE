@@ -226,8 +226,8 @@ struct CreatorDetailView: View {
 }
 
 
-struct TrendingCreatorsView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-    }
-}
+//struct TrendingCreatorsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeView()
+//    }
+//}

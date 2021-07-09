@@ -70,6 +70,7 @@ struct LoginButtonView: View {
     @State var isShowErr = false
     @State var isFailed = false
     @State var isLoginSuccess = false
+    @State var userID = 0
     
     var body: some View {
         Text("").hidden()
@@ -79,16 +80,19 @@ struct LoginButtonView: View {
                       dismissButton: .destructive(Text("Cancel")))
             }
         Button(action: {
-            self.isLoginSuccess = true
-//            if self.user.Email == "" || self.user.Password == "" {
-//                self.isShowErr = true
-//                return
-//            }
-//
-//            self.userService.Authenticate(user: user) { isSuccess in
-//                self.isLoginSuccess = isSuccess
-//                self.isFailed = !isSuccess
-//            }
+            if self.user.Email == "" || self.user.Password == "" {
+                self.isShowErr = true
+                return
+            }
+
+            self.userService.Authenticate(user: user) { isSuccess, userID in
+                if isSuccess {
+                    self.userID = userID
+                    self.isLoginSuccess = true
+                }else{
+                    self.isFailed = true
+                }
+            }
             return
         }, label: {
             Text("Login")
@@ -101,7 +105,7 @@ struct LoginButtonView: View {
         ZStack{
             Text("").hidden()
                 .fullScreenCover(isPresented: $isLoginSuccess, content: {
-                    HomeView()
+                    HomeView(userID: self.$userID)
                 })
         }
         .alert(isPresented: $isShowErr) {
@@ -148,7 +152,7 @@ struct ForgotPassword: View {
 }
 
 struct Register: View {
-    @State var registerState = RegisterState(email: "", password: "", passwordConfirm: "", colorState: false, typeSelected: "CHOOSE ACCOUNT'S TYPE!", isCreated: false, isExisted: false)
+    @State var registerState = RegisterState(email: "", nickName: "", firstName: "", lastName: "", imageProfile: "", password: "", passwordConfirm: "", colorState: false, typeSelected: "Choose account's type", isCreated: false, isExisted: false)
     @State var isGoBack = false
     @Binding var userService: UserService
     var body: some View {

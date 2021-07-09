@@ -17,11 +17,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(AppInstance: AppInstance(
-                user: User(
-                    Email: "",
-                    Password: "",
-                    AccountType: ""
-                ),
+                user: User(Email: "", NickName: "", FirstName: "", LastName: "", ImageProfile: "", Password: "", AccountType: ""),
                 userService: UserService()
             )
         )

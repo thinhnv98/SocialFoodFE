@@ -6,17 +6,24 @@
 //
 
 import SwiftUI
+import Kingfisher
+import SDWebImage
+import SDWebImageSwiftUI
 
 
-struct Restaurant: Hashable {
+struct Restaurant: Hashable, Decodable {
+    let id: Int
     let name, imageName: String
 }
 
 struct PopularRestaurantsView: View{
     
+    let userID: Int
+    @ObservedObject var vm = RestaurantViewModel()
+    
     let restaurants: [Restaurant] = [
-        .init(name: "Japan's Finest Tapas", imageName: "1.tapas"),
-        .init(name: "Bar & Grill", imageName: "1.bargrill"),
+        .init(id: 1, name: "Japan's Finest Tapas", imageName: "1.tapas"),
+        .init(id: 2, name: "Bar & Grill", imageName: "1.bargrill"),
     ]
     
     var body: some View{
@@ -25,16 +32,22 @@ struct PopularRestaurantsView: View{
                 Text("Popular places to eat")
                     .font(.system(size: 12, weight: .semibold))
                 Spacer()
-                Text("See all")
-                    .font(.system(size: 12, weight: .semibold))
+                NavigationLink (
+                    destination: NewRestaurant(parentVm: vm),
+                    label: {
+                        Text("Create")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color(.label))
+                    })
+                
             }.padding(.horizontal)
             .padding(.top)
             
             ScrollView(.horizontal) {
                 HStack(spacing: 8.0) {
-                    ForEach(restaurants, id: \.self) { restaurant in
+                    ForEach(vm.restaurants ?? [], id: \.self) { restaurant in
                         NavigationLink(
-                            destination: RestaurantDetailsView(restaurant: restaurant),
+                            destination: RestaurantDetailsView(restaurant: restaurant, userID: self.userID),
                             label: {
                                 RestaurantTile(restaurant: restaurant)
                                     .foregroundColor(Color(.label))
@@ -49,11 +62,25 @@ struct PopularRestaurantsView: View{
 
 struct RestaurantTile: View {
     
+    @ObservedObject var vm: RestaurantDetailsViewModel
     let restaurant: Restaurant
+    
+    init(restaurant: Restaurant) {
+        self.restaurant = restaurant
+        self.vm = .init(id: String(restaurant.id))
+    }
     
     var body: some View {
         HStack(spacing: 8){
-            Image(restaurant.imageName)
+//            Image(restaurant.imageName)
+            //                                                                WebImage(url: URL(string: imageName))
+            //                                                                    .resizable()
+            //                                                                    .indicator(.activity) // Activity Indicator
+            //                                                                        .transition(.fade(duration: 0.5)) // Fade Transition with duration
+            //                                                                    .scaledToFit()
+            
+//            KFImage(URL(string: restaurant.imageName))
+            WebImage(url: URL(string: restaurant.imageName))
                 .resizable()
                 .scaledToFill()
                 .frame(width: 60, height: 60)
@@ -74,10 +101,10 @@ struct RestaurantTile: View {
                 
                 HStack{
                     Image(systemName: "star.fill")
-                    Text("4.7 • Sushi • $$")
+                    Text("Food • Beautiful • $$")
                 }
                 
-                Text("Tokyo, Japan")
+                Text("\(vm.details?.city ?? ""), \(vm.details?.country ?? "")")
                     
             }
             .font(.system(size: 12, weight: .semibold))
@@ -89,10 +116,10 @@ struct RestaurantTile: View {
     }
 }
 
-//
-//struct PopularRestaurantsView_Previews: PreviewProvider {
+//struct HomeView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        PopularRestaurantsView()
+//        Group {
+//            HomeView()
+//        }
 //    }
 //}
-

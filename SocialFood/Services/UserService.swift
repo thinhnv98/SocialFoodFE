@@ -8,6 +8,7 @@
 import Foundation
 struct LoginResponse: Codable {
     var IsSuccess: Bool
+    var ID: Int
 }
 
 struct RegisterResponse: Codable {
@@ -23,14 +24,14 @@ class UserService: ObservableObject {
     static let loginURL = URL(string: "http://localhost:8080/api/login")
     static let registerURL = URL(string: "http://localhost:8080/api/register")
     
-    func Authenticate(user: User, completion: @escaping (Bool) -> ()) {
+    func Authenticate(user: User, completion: @escaping (Bool, Int) -> ()) {
         self.LoginAPI(user: user) { result in
             switch result {
             case.failure(let error):
                 print("Error: \(error)")
-                completion(false)
-            case.success(let isSuccess):
-                completion(isSuccess.IsSuccess)
+                completion(false, 0)
+            case.success(let resp):
+                completion(resp.IsSuccess, resp.ID)
             }
             
         }
@@ -75,6 +76,10 @@ class UserService: ObservableObject {
         //prepare request
         let parameters: [String: Any] = [
             "email": user.Email,
+            "userName": user.NickName,
+            "firstName": user.FirstName,
+            "lastName": user.LastName,
+            "profileImage": user.ImageProfile,
             "password": user.Password,
             "type": user.AccountType
         ]

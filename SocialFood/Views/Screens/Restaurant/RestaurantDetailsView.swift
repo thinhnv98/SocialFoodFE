@@ -6,12 +6,23 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct RestaurantDetails: Decodable {
+    var rank: Int
+    let city: String
+    let country: String
     let description: String
-    let popularDishes: [Dish]
+    var popularDishes: [Dish]
     let photos: [String]
-    let reviews: [Review]
+    let photoDetails: [PhotoDetails]
+    var reviews: [Review]
+}
+
+struct PhotoDetails: Hashable, Decodable {
+    var photo: String
+    var description: String
+    var createdAt: String
 }
 
 struct Review: Decodable, Hashable {
@@ -26,17 +37,17 @@ struct ReviewUser: Decodable, Hashable {
 }
 
 struct Dish: Decodable, Hashable {
-    let name, price, photo: String
-    let numPhotos: Int
+    var name, price, photo: String
+    var numPhotos: Int
 }
 
 class RestaurantDetailsViewModel: ObservableObject {
     @Published var isLoading = true
     @Published var details: RestaurantDetails?
     
-    init() {
+    init(id: String) {
         //fetch json
-        let urlString = "https://travel.letsbuildthatapp.com/travel_discovery/restaurant?id=0"
+        let urlString = "http://localhost:8080/api/restaurants-detail/\(id)"
         
         guard let url = URL(string: urlString) else {return}
         URLSession.shared.dataTask(with: url) { data, resp, err in
@@ -53,16 +64,26 @@ class RestaurantDetailsViewModel: ObservableObject {
 
 struct RestaurantDetailsView: View {
     
-    @ObservedObject var vm = RestaurantDetailsViewModel()
+    let userID: Int
+    @ObservedObject var vm: RestaurantDetailsViewModel
     
     let restaurant: Restaurant
     
+    init(restaurant: Restaurant, userID: Int) {
+        self.userID = userID
+        self.restaurant = restaurant
+        self.vm = .init(id: String(restaurant.id))
+    }
+    
+    @State var isNewDish = false
+    
     var body: some View {
-        ScrollView {
+        ScrollView() {
             ZStack (alignment: .bottomLeading){
-                Image(restaurant.imageName)
+                KFImage(URL(string: restaurant.imageName))
                     .resizable()
-                    .scaledToFill()
+                    .frame(height: 250)
+                    .scaledToFit()
                 
                 LinearGradient(gradient: Gradient(colors: [Color.clear, Color.black]), startPoint: .center, endPoint: .bottom)
                 
@@ -73,16 +94,25 @@ struct RestaurantDetailsView: View {
                             .font(.system(size: 18, weight: .bold))
                         
                         HStack {
-                            ForEach(0..<5, id: \.self) { num in
-                                Image(systemName: "star.fill")
-                            }.foregroundColor(.orange)
+                            if let rank = vm.details?.rank ?? 5 {
+                                ForEach(0..<rank, id: \.self) { num in
+                                    Image(systemName: "star.fill")
+                                }.foregroundColor(.orange)
+                                ForEach(0..<5 - rank, id: \.self) { num in
+                                    Image(systemName: "star.fill")
+                                }.foregroundColor(.gray)
+                            } else {
+                                ForEach(0..<5, id: \.self) { num in
+                                    Image(systemName: "star.fill")
+                                }.foregroundColor(.orange)
+                            }
                         }
                     }
                     
                     Spacer()
                     
                     NavigationLink(
-                        destination: RestaurantPhotosView(),
+                        destination: RestaurantPhotosView(photoUrlStrings: vm.details?.photos ?? [], photoDetails: vm.details?.photoDetails ?? []),
                         label: {
                             Text("See more photos")
                                 .foregroundColor(.white)
@@ -97,7 +127,7 @@ struct RestaurantDetailsView: View {
                 Text("Location & Description")
                     .font(.system(size: 16, weight: .bold))
                 
-                Text("Tokyo, Japan")
+                Text("\(vm.details?.city ?? ""), \(vm.details?.country ?? "")")
                 
                 HStack {
                     ForEach(0..<5, id: \.self) { num in
@@ -111,16 +141,31 @@ struct RestaurantDetailsView: View {
             .padding(.top)
             .padding(.horizontal)
             
-            Text(vm.details?.description ?? "")
-                .padding(.top, 8)
-                .font(.system(size: 14, weight: .regular))
-                .padding(.horizontal)
-                .padding(.bottom)
+            HStack {
+                Text(vm.details?.description ?? "")
+                    .padding(.top, 8)
+                    .font(.system(size: 14, weight: .regular))
+                    .padding(.horizontal)
+                    .padding(.bottom)
+                
+                Spacer()
+            }
             
             HStack{
                 Text("Popular Dishes")
                     .font(.system(size: 16, weight: .bold))
                 Spacer()
+                NavigationLink (
+                    destination: NewDish(restaurantID: restaurant.id, parentVm: vm),
+                    label: {
+                        Text("Create")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.white)
+                            .padding(5)
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                            .background(Color.orange)
+                            .cornerRadius(10)
+                    })
             }.padding(.horizontal)
 
             ScrollView(.horizontal, showsIndicators: false) {
@@ -132,27 +177,36 @@ struct RestaurantDetailsView: View {
             }
             
             if let reviews = vm.details?.reviews {
-                ReviewsList(reviews: reviews)
+                ReviewsList(userID: self.userID, restaurant: restaurant, reviews: reviews, parentVm: vm)
             }
         }
         .navigationBarTitle("Restaurant Details", displayMode: .inline)
     }
-    
-    let sampleDishPhotos = [
-        "https://letsbuildthatapp-videos.s3.us-west-2.amazonaws.com/0d1d2e79-2f10-4cfd-82da-a1c2ab3638d2",
-        "https://letsbuildthatapp-videos.s3.us-west-2.amazonaws.com/3a352f87-3dc1-4fa7-affe-fb12fa8691fe"
-    ]
 }
 
 struct ReviewsList: View {
-    
+    let userID: Int
+    var restaurant: Restaurant
     let reviews: [Review]
+    
+    @ObservedObject var parentVm: RestaurantDetailsViewModel
     
     var body: some View {
         HStack{
             Text("Customer Reviews")
                 .font(.system(size: 16, weight: .bold))
             Spacer()
+            NavigationLink (
+                destination: ReviewRestaurant(userID: self.userID, restaurant: restaurant, parentVm: parentVm),
+                label: {
+                    Text("Review")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding(5)
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                        .background(Color.orange)
+                        .cornerRadius(10)
+                })
         }.padding(.horizontal)
         
 //        if let reviews = reviews {
@@ -184,7 +238,7 @@ struct ReviewsList: View {
                         }
                         
                         Spacer()
-                        Text("Jun 2021")
+                        Text("July 2021")
                             .font(.system(size: 14, weight: .bold))
                     }
                     
@@ -231,4 +285,10 @@ struct Dishcell: View {
     }
 }
 
-import Kingfisher
+//struct HomeView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Group {
+//            HomeView()
+//        }
+//    }
+//}

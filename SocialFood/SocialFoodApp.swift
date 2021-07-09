@@ -13,11 +13,7 @@ struct SocialFoodApp: App {
         WindowGroup {
             ContentView(
                 AppInstance: AppInstance(
-                    user: User(
-                        Email: "",
-                        Password: "",
-                        AccountType: ""
-                    ),
+                    user: User(Email: "", NickName: "", FirstName: "", LastName: "", ImageProfile: "", Password: "", AccountType: ""),
                     userService: UserService()
                 )
             )

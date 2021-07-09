@@ -13,12 +13,14 @@ extension Color {
 }
 
 struct HomeView: View {
+    @Binding var userID: Int
     
-    init() {
-        UINavigationBar.appearance().largeTitleTextAttributes = [
-            .foregroundColor: UIColor.white
-        ]
-    }
+//    init(userID: Binding<Int>) {
+//        userID = userID
+//        UINavigationBar.appearance().largeTitleTextAttributes = [
+//            .foregroundColor: UIColor.white
+//        ]
+//    }
     
     var body: some View{
         NavigationView{
@@ -50,7 +52,7 @@ struct HomeView: View {
                         
                         PopularDestinationsView()
                         
-                        PopularRestaurantsView()
+                        PopularRestaurantsView(userID: userID)
                         
                         TrendingCreatorsView()
                     }.background(Color.discoverBackground)
